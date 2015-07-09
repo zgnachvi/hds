@@ -22,4 +22,6 @@ int main()
 	t.balance();
 
 	pretty_print_tree(t.root);
+
+	cout << "asdfasdf" << endl;
 }
