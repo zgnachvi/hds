@@ -25,6 +25,6 @@ Node<T>::Node()
     p = NULL;
     child[0] = NULL;
     child[1] = NULL;
-    bf = 0;    //black leaf
+    bf = 0;
 }
 #endif

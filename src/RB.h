@@ -23,10 +23,14 @@ class Tree {
 	Node<T>* balanceR(Node<T>* h);
 	Node<T>* longRotate(Node<T>* x, Node<T>* h);
 	Node<T>* balanceIt(Node<T>* h);
-public:
-	void balanceMod();
 	Node<T>* balanceMod(Node<T>* h);
-	void balanceNew();
+	void colorTree(Node<T>* node, int maxHeight);
+	int tree_to_vine(Node<T>* r);
+	int fullSize(int size);
+	void compression(Node<T>* root, int count);
+	void vine_to_tree(Node<T>* root, int size);
+	void updateParents (Node<T>* node, Node<T>* parent);
+public:
 	Node<T>* root;
 	Tree();
 	Tree(Mode m);
@@ -41,12 +45,17 @@ public:
 	}
 	void insertMax(Node<T>* z);
 	void destroyTree(Node<T>* node);
-
-	void setModeOST(void);
 	Node<T>* select(Node<T>* node, int i);
 	Node<T>* partR(Node<T>* h, int k);
+
+	void setModeOST(void);
+	void setModeRBT(void);
 	void balance();
+	void balanceMod();
+	void balanceNew();
+	void balanceDSW();
 };
+
 template<typename T>
 Tree<T>::Tree() {
 	root = NULL;
@@ -82,6 +91,7 @@ int Tree<T>::N(Node<T>* n) {
 		return n->bf;
 	}
 	cout << "You are in \"RB\" mode!" << endl;
+	return 0;
 }
 
 template<typename T>
@@ -213,6 +223,25 @@ void Tree<T>::setModeOST(void) {
 }
 
 template<typename T>
+void Tree<T>::setModeRBT(void) {
+	mode = RB;
+	int maxHeight = (int)log2(size);
+	colorTree(root, maxHeight);
+}
+
+template<typename T>
+void Tree<T>::colorTree(Node<T>* node, int maxHeight) {
+	static int level = -1;
+	if (node != NULL) {
+		level++;
+		node->bf = level < maxHeight ? 0 : 1;
+		colorTree(node->child[0], maxHeight);
+		colorTree(node->child[1], maxHeight);
+		level--;
+   }
+}
+
+template<typename T>
 Node<T>* Tree<T>::select(Node<T>* node, int i) {
 	if (mode == RB || i < 0 || i > node->bf) {
 		cout << "Correct mode or order" << endl;
@@ -326,27 +355,109 @@ Node<T>* Tree<T>::balanceMod(Node<T>* h) {
 
 		h = partR(h, h->bf - (int) pow(2, height - 1) + 1 - 1);
 
-		h->child[0] = balanceR(h->child[0]);
-		if (NULL != h->child[0])
-			h->child[0]->p = h;
-		h->child[1] = balanceMod(h->child[1]);
-		if (NULL != h->child[1])
-			h->child[1]->p = h;
-	} else {
-
-		h = partR(h, (int) pow(2, height) - 1);
-
 		h->child[0] = balanceMod(h->child[0]);
 		if (NULL != h->child[0])
 			h->child[0]->p = h;
 		h->child[1] = balanceR(h->child[1]);
 		if (NULL != h->child[1])
 			h->child[1]->p = h;
+	} else {
+
+		h = partR(h, (int) pow(2, height) - 1);
+
+		h->child[0] = balanceR(h->child[0]);
+		if (NULL != h->child[0])
+			h->child[0]->p = h;
+		h->child[1] = balanceMod(h->child[1]);
+		if (NULL != h->child[1])
+			h->child[1]->p = h;
 	}
 
 	return h;
 }
+
 template<typename T>
 void Tree<T>::balanceMod() {
 	root = balanceMod(root);
+}
+
+template<typename T>
+int Tree<T>::tree_to_vine (Node<T>* r) {
+   Node<T>* vineTail = r;
+   Node<T>* remainder = vineTail->child[1];
+
+   int size = 0;
+   Node<T>* tempPtr;
+   while (remainder != NULL) {
+	  // თუ მარცხენა შვილი აღარ ჰყავს, იტერაცია გადადის მიმდინარე კვანძის მარჯვენა შვილზე
+	  if (remainder->child[0] == NULL) {
+		 vineTail = remainder;
+		 remainder = remainder->child[1];
+		 size++;
+	  }
+	  // შეამცირე მარცხენა ქვეხე მარჯვნივ მობრუნებით
+	  else {
+		  // მობრუნება მარჯვნივ
+		 tempPtr = remainder->child[0];
+		 remainder->child[0] = tempPtr->child[1];
+		 tempPtr->child[1] = remainder;
+		 remainder = tempPtr;
+		 vineTail->child[1] = tempPtr;
+	  }
+   }
+
+   return size;
+}
+
+template<typename T>
+int Tree<T>::fullSize(int size) {
+	int n = 1;
+	while (n <= size) {
+		n = n + n + 1;
+	}
+	return n / 2;
+}
+
+template<typename T>
+void Tree<T>::compression(Node<T>* root, int count) {
+	Node<T>* scanner = root;
+	// მობრუნება მარცხნივ
+	for (int i = 0; i < count; i++) {
+		Node<T>* child = scanner->child[1];
+		scanner->child[1] = child->child[1];
+		scanner = scanner->child[1];
+		child->child[1] = scanner->child[0];
+		scanner->child[0] = child;
+	}
+}
+
+template<typename T>
+void Tree<T>::vine_to_tree(Node<T>* root, int size) {
+	int fullCount = fullSize(size);
+	compression(root, size - fullCount);
+	for (size = fullCount; size > 1; size /= 2) {
+		compression(root, size / 2);
+	}
+}
+
+template<typename T>
+void Tree<T>::updateParents(Node<T>* node, Node<T>* parent) {
+	if (node != NULL) {
+		updateParents(node->child[0], node);
+		updateParents(node->child[1], node);
+		node->p = parent;
+	}
+}
+
+template<typename T>
+void Tree<T>::balanceDSW () {
+	Node<int>* pseudo_root = new Node<int>(-1);
+	pseudo_root->child[1] = root;
+
+	int size = tree_to_vine(pseudo_root);
+	vine_to_tree(pseudo_root, size);
+
+	root = pseudo_root->child[1];
+
+	updateParents(root, NULL);
 }
