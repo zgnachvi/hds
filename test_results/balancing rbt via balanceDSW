@@ -1,0 +1,61 @@
+Balancing Red-black tree with 1000 nodes via "DSW" method
+Test started...
+
+tree size: 1000; tree height: 12
+balancing...
+balanced in: 0.04 ms
+tree size: 1000; tree height: 10
+
+Test completed successfully!
+
+Balancing Red-black tree with 10000 nodes via "DSW" method
+Test started...
+
+tree size: 10000; tree height: 16
+balancing...
+balanced in: 0.547 ms
+tree size: 10000; tree height: 14
+
+Test completed successfully!
+
+Balancing Red-black tree with 100000 nodes via "DSW" method
+Test started...
+
+tree size: 100000; tree height: 20
+balancing...
+balanced in: 17.146 ms
+tree size: 100000; tree height: 17
+
+Test completed successfully!
+
+Balancing Red-black tree with 1000000 nodes via "DSW" method
+Test started...
+
+tree size: 1000000; tree height: 24
+balancing...
+balanced in: 255.354 ms
+tree size: 1000000; tree height: 20
+
+Test completed successfully!
+
+Balancing Red-black tree with 10000000 nodes via "DSW" method
+Test started...
+
+tree size: 10000000; tree height: 29
+balancing...
+balanced in: 2979.54 ms
+tree size: 10000000; tree height: 24
+
+Test completed successfully!
+
+Balancing Red-black tree with 100000000 nodes via "DSW" method
+Test started...
+
+tree size: 100000000; tree height: 34
+balancing...
+balanced in: 47727.2 ms
+tree size: 100000000; tree height: 27
+
+Test completed successfully!
+
+

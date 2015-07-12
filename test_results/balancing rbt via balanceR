@@ -1,0 +1,61 @@
+Balancing Red-black tree with 1000 nodes via "balanceR" method
+Test started...
+
+tree size: 1000; tree height: 13
+balancing...
+balanced in: 0.076 ms
+tree size: 1000; tree height: 10
+
+Test completed successfully!
+
+Balancing Red-black tree with 10000 nodes via "balanceR" method
+Test started...
+
+tree size: 10000; tree height: 17
+balancing...
+balanced in: 0.78 ms
+tree size: 10000; tree height: 14
+
+Test completed successfully!
+
+Balancing Red-black tree with 100000 nodes via "balanceR" method
+Test started...
+
+tree size: 100000; tree height: 20
+balancing...
+balanced in: 22.051 ms
+tree size: 100000; tree height: 17
+
+Test completed successfully!
+
+Balancing Red-black tree with 1000000 nodes via "balanceR" method
+Test started...
+
+tree size: 1000000; tree height: 25
+balancing...
+balanced in: 230.809 ms
+tree size: 1000000; tree height: 20
+
+Test completed successfully!
+
+Balancing Red-black tree with 10000000 nodes via "balanceR" method
+Test started...
+
+tree size: 10000000; tree height: 30
+balancing...
+balanced in: 2579.4 ms
+tree size: 10000000; tree height: 24
+
+Test completed successfully!
+
+Balancing Red-black tree with 100000000 nodes via "balanceR" method
+Test started...
+
+tree size: 100000000; tree height: 34
+balancing...
+balanced in: 39750.8 ms
+tree size: 100000000; tree height: 27
+
+Test completed successfully!
+
+

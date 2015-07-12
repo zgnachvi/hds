@@ -126,7 +126,7 @@ void building_rbt_random (int tree_size) {
 		cout << "Invalid tree size" << endl;
 		return;
 	}
-	cout << "Building Red-black tree with " << tree_size << " nodes." << endl;
+	cout << "Building Red-black tree with " << tree_size << " nodes. Randomly" << endl;
 
 	Tree<int> tree;
 	clock_t start, finish;
@@ -151,7 +151,7 @@ void building_rbt_inorder (int tree_size) {
 		cout << "Invalid tree size" << endl;
 		return;
 	}
-	cout << "Building Red-black tree with " << tree_size << " nodes." << endl;
+	cout << "Building Red-black tree with " << tree_size << " nodes. Inorder" << endl;
 
 	Tree<int> tree;
 	clock_t start, finish;
