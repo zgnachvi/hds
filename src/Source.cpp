@@ -13,15 +13,23 @@ void balancingExample();
 int calculateHeight(Node<int>*);
 inline int Max(int, int);
 
-double balancing_rbt_via_balanceDSW(int, bool);
-double balancing_rbt_via_balanceR(int, bool);
-double balancing_rbt_via_balanceMod(int, bool);
+double balancing_rbt_via_balanceDSW(int, bool, bool);
+double balancing_rbt_via_balanceR(int, bool, bool);
+double balancing_rbt_via_balanceMod(int, bool, bool);
 
 double getAverage(double *arr, int len);
 double building_rbt_random(int, bool);
 double building_rbt_inorder(int, bool);
 
-double balancing_rbt_via_balanceDSW(int tree_size, bool print) {
+void runBalanceDSWInorder(int);
+void runBalanceRInorder(int);
+void runBalanceModInorder(int);
+
+void runBalanceDSWRandom(int);
+void runBalanceRRandom(int);
+void runBalanceModRandom(int);
+
+double balancing_rbt_via_balanceDSW(int tree_size, bool print, bool inorder) {
 	if (!tree_size || tree_size > MAX_TREE_SIZE) {
 		cout << "Invalid tree size" << endl;
 		return 0;
@@ -34,7 +42,7 @@ double balancing_rbt_via_balanceDSW(int tree_size, bool print) {
 	if (print) cout << "Test started..." << endl << endl;
 
 	for (int i = 0; i < tree_size; i++) {
-		Node<int>* node = new Node<int>(rand() % MAX_KEY_VALUE);
+		Node<int>* node = new Node<int>(inorder ? i : rand() % MAX_KEY_VALUE);
 		tree.insert(node);
 	}
 
@@ -62,7 +70,7 @@ double balancing_rbt_via_balanceDSW(int tree_size, bool print) {
 	return time;
 }
 
-double balancing_rbt_via_balanceR(int tree_size, bool print) {
+double balancing_rbt_via_balanceR(int tree_size, bool print, bool inorder) {
 	if (!tree_size || tree_size > MAX_TREE_SIZE) {
 		cout << "Invalid tree size" << endl;
 		return 0;
@@ -75,7 +83,7 @@ double balancing_rbt_via_balanceR(int tree_size, bool print) {
 	if (print) cout << "Test started..." << endl << endl;
 
 	for (int i = 0; i < tree_size; i++) {
-		Node<int>* node = new Node<int>(rand() % MAX_KEY_VALUE);
+		Node<int>* node = new Node<int>(inorder ? i : rand() % MAX_KEY_VALUE);
 		tree.insert(node);
 	}
 
@@ -106,7 +114,7 @@ double balancing_rbt_via_balanceR(int tree_size, bool print) {
 	return time;
 }
 
-double balancing_rbt_via_balanceMod(int tree_size, bool print) {
+double balancing_rbt_via_balanceMod(int tree_size, bool print, bool inorder) {
 	if (!tree_size || tree_size > MAX_TREE_SIZE) {
 		cout << "Invalid tree size" << endl;
 		return 0;
@@ -120,7 +128,7 @@ double balancing_rbt_via_balanceMod(int tree_size, bool print) {
 	if (print) cout << "Test started..." << endl << endl;
 
 	for (int i = 0; i < tree_size; i++) {
-		Node<int>* node = new Node<int>(rand() % MAX_KEY_VALUE);
+		Node<int>* node = new Node<int>(inorder ? i : rand() % MAX_KEY_VALUE);
 		tree.insert(node);
 	}
 
@@ -213,25 +221,6 @@ double building_rbt_inorder(int tree_size, bool print) {
 	return time;
 }
 
-int main() {
-	srand(time(NULL));
-
-	for (int i = 1000; i <= 100000; i *= 10) {
-		int n = 10;
-		double times[n];
-		for (int j = 0; j < n; j++) {
-			times[j] = building_rbt_random(i, false);
-		}
-		cout << "Average time: " << getAverage(times, n) << endl << endl;
-
-		building_rbt_inorder(i, false);
-		balancing_rbt_via_balanceR(i, false);
-		balancing_rbt_via_balanceMod(i, false);
-		balancing_rbt_via_balanceDSW(i, false);
-	}
-
-}
-
 double getAverage (double *arr, int len) {
 	double sum = 0;
 	for (int i=0; i<len; i++) {
@@ -273,4 +262,98 @@ int calculateSize(Node<int>* node) {
 
 inline int Max(int l, int r) {
 	return l > r ? l : r;
+}
+
+int main() {
+	srand(time(NULL));
+	int n = 10;
+
+	runBalanceDSWInorder(n);
+	runBalanceRInorder(n);
+	runBalanceModInorder(n);
+
+	runBalanceDSWRandom(n);
+	runBalanceRRandom(n);
+	runBalanceModRandom(n);
+}
+
+// in-order
+void runBalanceDSWInorder (int n) {
+	double times[n];
+	for (int i = 1000; i <= MAX_TREE_SIZE; i *= 10) {
+		for (int j = 0; j < n; j++) {
+			times[j] = balancing_rbt_via_balanceDSW(i, false, true);
+		}
+		cout << "Balancing in-order built RBT (";
+		cout << i << " nodes) ";
+		cout << "via balanceDSW method... Tests run "<< n;
+		cout <<" times. Average time: " << getAverage(times, n) << " milliseconds." << endl << endl;
+	}
+}
+
+void runBalanceRInorder (int n) {
+	double times[n];
+	for (int i = 1000; i <= MAX_TREE_SIZE; i *= 10) {
+		for (int j = 0; j < n; j++) {
+			times[j] = balancing_rbt_via_balanceR(i, false, true);
+		}
+		cout << "Balancing in-order built RBT (";
+		cout << i << " nodes) ";
+		cout << "via balanceR method... Tests run "<< n;
+		cout <<" times. Average time: " << getAverage(times, n) << " milliseconds." << endl << endl;
+	}
+}
+
+void runBalanceModInorder (int n) {
+	double times[n];
+	for (int i = 1000; i <= MAX_TREE_SIZE; i *= 10) {
+		for (int j = 0; j < n; j++) {
+			times[j] = balancing_rbt_via_balanceMod(i, false, true);
+		}
+		cout << "Balancing in-order built RBT (";
+		cout << i << " nodes) ";
+		cout << "via balanceMod method... Tests run "<< n;
+		cout <<" times. Average time: " << getAverage(times, n) << " milliseconds." << endl << endl;
+	}
+}
+
+
+// random
+void runBalanceDSWRandom (int n) {
+	double times[n];
+	for (int i = 1000; i <= MAX_TREE_SIZE; i *= 10) {
+		for (int j = 0; j < n; j++) {
+			times[j] = balancing_rbt_via_balanceDSW(i, false, false);
+		}
+		cout << "Balancing randomly built RBT (";
+		cout << i << " nodes) ";
+		cout << "via balanceDSW method... Tests run "<< n;
+		cout <<" times. Average time: " << getAverage(times, n) << " milliseconds." << endl << endl;
+	}
+}
+
+void runBalanceRRandom (int n) {
+	double times[n];
+	for (int i = 1000; i <= MAX_TREE_SIZE; i *= 10) {
+		for (int j = 0; j < n; j++) {
+			times[j] = balancing_rbt_via_balanceR(i, false, false);
+		}
+		cout << "Balancing randomly built RBT (";
+		cout << i << " nodes) ";
+		cout << "via balanceR method... Tests run "<< n;
+		cout <<" times. Average time: " << getAverage(times, n) << " milliseconds." << endl << endl;
+	}
+}
+
+void runBalanceModRandom (int n) {
+	double times[n];
+	for (int i = 1000; i <= MAX_TREE_SIZE; i *= 10) {
+		for (int j = 0; j < n; j++) {
+			times[j] = balancing_rbt_via_balanceMod(i, false, false);
+		}
+		cout << "Balancing randomly built RBT (";
+		cout << i << " nodes) ";
+		cout << "via balanceMod method... Tests run "<< n;
+		cout <<" times. Average time: " << getAverage(times, n) << " milliseconds." << endl << endl;
+	}
 }
