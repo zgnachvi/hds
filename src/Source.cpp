@@ -335,7 +335,7 @@ inline int Max(int l, int r) {
 int main() {
 	srand(time(NULL));
 	int start = MAX_TREE_SIZE;
-	int n = 20;
+	int n = 1;
 	bool print = true;
 
 	runBalanceDSWInorder(start, n, print);
@@ -345,6 +345,12 @@ int main() {
 	runBalanceDSWRandom(start, n, print);
 	runBalanceRRandom(start, n, print);
 	runBalanceModRandom(start, n, print);
+
+	runBuildRBTInorder(start, n, print);
+	runBuildRBT2Inorder(start, n, print);
+
+	runBuildRBTRandom(start, n, print);
+	runBuildRBT2Random(start, n, print);
 }
 
 // in-order
