@@ -334,23 +334,23 @@ inline int Max(int l, int r) {
 
 int main() {
 	srand(time(NULL));
-	int start = MAX_TREE_SIZE;
-	int n = 1;
-	bool print = true;
+	int start = 1000;
+	int n = 20;
+	bool printDetails = false;
 
-	runBalanceDSWInorder(start, n, print);
-	runBalanceRInorder(start, n, print);
-	runBalanceModInorder(start, n, print);
+	runBalanceDSWInorder(start, n, printDetails);
+	runBalanceRInorder(start, n, printDetails);
+	runBalanceModInorder(start, n, printDetails);
 
-	runBalanceDSWRandom(start, n, print);
-	runBalanceRRandom(start, n, print);
-	runBalanceModRandom(start, n, print);
+	runBalanceDSWRandom(start, n, printDetails);
+	runBalanceRRandom(start, n, printDetails);
+	runBalanceModRandom(start, n, printDetails);
 
-	runBuildRBTInorder(start, n, print);
-	runBuildRBT2Inorder(start, n, print);
+	runBuildRBTInorder(start, n, printDetails);
+	runBuildRBT2Inorder(start, n, printDetails);
 
-	runBuildRBTRandom(start, n, print);
-	runBuildRBT2Random(start, n, print);
+	runBuildRBTRandom(start, n, printDetails);
+	runBuildRBT2Random(start, n, printDetails);
 }
 
 // in-order
