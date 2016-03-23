@@ -2,7 +2,7 @@
 #define NODE_H
 template<typename T>
 struct Node {
-    T key; 
+    T key;  
     Node* child[2];
     int bf; //balance factor   
     Node();   

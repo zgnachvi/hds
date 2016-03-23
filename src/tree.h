@@ -16,8 +16,15 @@ class Tree {
 	Node<T>* balanceR(Node<T>* h);
 	Node<T>* partR(Node<T>* h, int k);
 	Node<T>* balanceMod(Node<T>* h);
+        int tree_to_vine(Node<T>* r);
+        int fullSize(int size);
+        void compression(Node<T>* root, int count);
+	void vine_to_tree(Node<T>* root, int size);
+
 public:
 	Node<T>* root;
+        Node<T>* head;
+	Node<T>* tail = NULL;
 	Tree();
 	~Tree();
 	void insert(T k);
@@ -30,6 +37,7 @@ public:
 	int height(Node<T>* x);
 	void balance();
 	void balanceMod();
+        void balanceDSW();
 };
 
  //aq n-ic gvinda, radgan ar vicit romel xeshi cavardeba
@@ -198,4 +206,78 @@ Node<T>* Tree<T>::balanceMod(Node<T>* h) {
 		h->child[0] = balanceR(h->child[0]);
 	}
 	return h;
+}
+
+
+//DSW
+template<typename T>
+int Tree<T>::tree_to_vine (Node<T>* r) {
+   Node<T>* vineTail = r;
+   Node<T>* remainder = vineTail->child[1];
+
+   int size = 0;
+   Node<T>* tempPtr;
+   while (remainder != NULL) {
+	  // თუ მარცხენა შვილი აღარ ჰყავს, იტერაცია გადადის მიმდინარე კვანძის მარჯვენა შვილზე
+	  if (remainder->child[0] == NULL) {
+		 vineTail = remainder;
+		 remainder = remainder->child[1];
+		 size++;
+	  }
+	  // შეამცირე მარცხენა ქვეხე მარჯვნივ მობრუნებით
+	  else {
+		  // მობრუნება მარჯვნივ
+		 tempPtr = remainder->child[0];
+		 remainder->child[0] = tempPtr->child[1];
+		 tempPtr->child[1] = remainder;
+		 remainder = tempPtr;
+		 vineTail->child[1] = tempPtr;
+	  }
+   }
+
+   return size;
+}
+
+template<typename T>
+int Tree<T>::fullSize(int size) {
+	int n = 1;
+	while (n <= size) {
+		n = n + n + 1;
+	}
+	return n / 2;
+}
+
+template<typename T>
+void Tree<T>::compression(Node<T>* root, int count) {
+	Node<T>* scanner = root;
+	// მობრუნება მარცხნივ
+	for (int i = 0; i < count; i++) {
+		Node<T>* child = scanner->child[1];
+		scanner->child[1] = child->child[1];
+		scanner = scanner->child[1];
+		child->child[1] = scanner->child[0];
+		scanner->child[0] = child;
+	}
+}
+
+template<typename T>
+void Tree<T>::vine_to_tree(Node<T>* root, int size) {
+	int fullCount = fullSize(size);
+	compression(root, size - fullCount);
+	for (size = fullCount; size > 1; size /= 2) {
+		compression(root, size / 2);
+	}
+}
+
+template<typename T>
+void Tree<T>::balanceDSW () {
+	Node<int>* pseudo_root = new Node<int>(-1);
+	pseudo_root->child[1] = root;
+
+	int size = tree_to_vine(pseudo_root);
+	vine_to_tree(pseudo_root, size);
+
+	root = pseudo_root->child[1];
+
+	//მშობლის აფდეითი არის ამოგდებული
 }
