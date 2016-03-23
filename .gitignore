@@ -2,3 +2,6 @@
 /.cproject
 /Debug
 /data.out
+/dist/
+/build/
+/nbproject/
